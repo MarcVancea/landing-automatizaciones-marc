@@ -79,11 +79,12 @@
     <div class="container">
       <h2>¿Hablamos?</h2>
       <p>Rellena el siguiente formulario y me pondré en contacto contigo en menos de 24 horas.</p>
-      <form action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
+      <form id="contact-form" action="https://formspree.io/f/mdkzyqyb" method="POST">
         <input type="text" name="nombre" placeholder="Tu nombre" required />
         <input type="email" name="email" placeholder="Tu correo electrónico" required />
         <textarea name="mensaje" rows="6" placeholder="Cuéntame qué necesitas automatizar o mejorar" required></textarea>
         <button type="submit">Enviar mensaje</button>
+        <p id="form-status" class="form-status"></p>
       </form>
     </div>
   </section>
@@ -94,5 +95,38 @@
       <p>© 2025 Marc · Automatizaciones con IA · Girona</p>
     </div>
   </footer>
+
+<script>
+  const form = document.getElementById('contact-form');
+  const status = document.getElementById('form-status');
+
+  form.addEventListener('submit', async function (e) {
+    e.preventDefault();
+    const data = new FormData(form);
+    const action = form.action;
+
+    try {
+      const response = await fetch(action, {
+        method: 'POST',
+        body: data,
+        headers: {
+          'Accept': 'application/json'
+        }
+      });
+
+      if (response.ok) {
+        status.textContent = '✅ ¡Mensaje enviado con éxito!';
+        status.style.color = '#00ff99';
+        form.reset();
+      } else {
+        status.textContent = '❌ Hubo un error al enviar. Intenta más tarde.';
+        status.style.color = '#ff4d4f';
+      }
+    } catch (error) {
+      status.textContent = '❌ Error de conexión. Inténtalo de nuevo.';
+      status.style.color = '#ff4d4f';
+    }
+  });
+</script>
 </body>
 </html>
